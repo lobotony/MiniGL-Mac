@@ -5,20 +5,20 @@
 // implement startup/update/shutdown, watch the threading: startup/shutdown are called on the main ui thread, update is called in the DisplayLink thread
 // grab input events through the Window class below
 // grab window resize event in app delegate
-void startup()
+void minigl_startup()
 {
   NSLog(@"!! startup on thread: %@ %@", [NSThread currentThread].name, [NSThread currentThread]);
 }
 
 // not on main thread
-void update()
+void minigl_update()
 {
   NSLog(@"!! update on thread: %@ %@", [NSThread currentThread].name, [NSThread currentThread]);
   glClearColor(0, 1, 0, 1);
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 }
 
-void shutdown()
+void minigl_shutdown()
 {
   NSLog(@"!! shutdown on thread: %@ %@", [NSThread currentThread].name, [NSThread currentThread]);
 }
@@ -30,7 +30,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeSt
   NSOpenGLView* glview = (__bridge NSOpenGLView*)displayLinkContext;
   NSOpenGLContext* glcontext = [glview openGLContext];
   [glcontext makeCurrentContext];
-  update();
+  minigl_update();
   [glcontext flushBuffer];
   
   return kCVReturnSuccess;
@@ -55,7 +55,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeSt
 - (void) quitAction: (id)sender
 {
   CVDisplayLinkStop(_displayLink);
-  shutdown();
+  minigl_shutdown();
   [[NSApplication sharedApplication] terminate: nil];
 }
 
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 
   // make context current for this thread to be able to safely call startup
   [[glview openGLContext] makeCurrentContext];
-  startup();
+  minigl_startup();
   [NSOpenGLContext clearCurrentContext]; // then clear the context for this thread, so it's later only active on the render thread
   
   LEWindow* window = [[LEWindow alloc]
