@@ -109,17 +109,17 @@ int main(int argc, char *argv[])
   {
     title = [[NSProcessInfo processInfo] processName];
   }
-  NSMenu *main_menu = [[NSMenu allocWithZone: [NSMenu menuZone]] initWithTitle: @"temp"];
+  NSMenu *main_menu = [[NSMenu alloc] initWithTitle: @"temp"];
   [app setMainMenu: main_menu];
-  menu = [[NSMenu allocWithZone: [NSMenu menuZone]] initWithTitle: @"temp"];
-  temp_item = [[NSMenuItem allocWithZone: [NSMenu menuZone]]
+  menu = [[NSMenu alloc] initWithTitle: @"temp"];
+  temp_item = [[NSMenuItem alloc]
                initWithTitle: @"temp"
                action: NULL
                keyEquivalent: @""];
   [[app mainMenu] addItem: temp_item];
   [[app mainMenu] setSubmenu: menu forItem: temp_item];
   NSString *quit = [@"Quit " stringByAppendingString: title];
-  menu_item = [[NSMenuItem allocWithZone: [NSMenu menuZone]]
+  menu_item = [[NSMenuItem alloc]
                initWithTitle: quit
                action: @selector(quitAction:)
                keyEquivalent: @"q"];
